@@ -7,7 +7,7 @@ from impacket.smbserver import SimpleSMBServer
 IP = "192.168.99.1"
 PORT = 445
 SHARE = "DATA"
-FOLDER = pathlib.Path.home() / "Desktop" / "Shared Data"
+FOLDER = pathlib.Path.home() / "Desktop" / "SHARED"
 FOLDER.mkdir(parents=True, exist_ok=True)
 
 # Configure logging
@@ -27,12 +27,13 @@ try:
     server = SimpleSMBServer(listenAddress=IP, listenPort=PORT)
 except OSError as e:
     if e.errno == errno.EACCES:
-        sys.exit(f"Port {PORT} is unavailable without elevated permissions.")
+        logging.error(f"Port {PORT} is not accessible.")
     if e.errno == errno.EADDRINUSE:
-        sys.exit(f"Port {PORT} is already in use.")
+        logging.error(f"Port {PORT} is already in use.")
     if e.errno == errno.EADDRNOTAVAIL:
-        sys.exit(f"IP address {IP} is not available.")
-    raise
+        logging.error(f"IP address {IP} is not available.")
+    input("Press Enter to exit...")
+    sys.exit(1)
 
 # Share data folder
 server.addShare(SHARE, str(FOLDER), "")

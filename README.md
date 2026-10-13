@@ -14,19 +14,22 @@ If these address conflict with any existing networks, this can be changed in `se
 
 ## Host PC
 
-<details>
-<summary>MacOS</summary>
+Check what is already running on port:
+- Unix: `sudo lsof -nP -i :445`
+- Windows: `netstat -ano | findstr :445`
 
-</details>
-
-<details>
-<summary>Windows 11</summary>
-
-</details>
+Disable native use of port 445:
+- MacOS: `sudo launchctl disable system/com.apple.smbd`
+- Windows: `sc config lanmanserver start= disabled`
 
 ## Client PC
 
-<details>
-<summary>Windows XP</summary>
+Map shared drive:
+- Windows XP: `net use Z: \\192.168.99.1\DATA`
 
-</details>
+Delete shared drive:
+- Windows XP: `net use Z: /delete`
+
+
+## Special notes:
+It may be required on Windows to disable `Disable NetBIOS over TCP/IP` (since it will try to connect over port 139).
